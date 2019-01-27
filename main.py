@@ -1,14 +1,8 @@
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 import util as util
 import cv2
-
-
-
-
-print('Hello world')
-#print(sys.executable)
+import random
 
 #steps for data generation
 
@@ -65,7 +59,7 @@ def gen_triplet_list(s_train,s_db):
     print('building triplet list')
     triplet_list = []
 
-    #for i in range(10):
+    #for i in range(100):
     for i in range(s_train['pose'].shape[0]):
         #print(i)
         test_anchor = s_train['pose'][i, :]
@@ -78,15 +72,23 @@ def gen_triplet_list(s_train,s_db):
     # visualizer(s_train['img'][i, :, :, :], s_db['img'][puller, :, :, :], s_db['img'][s_pusher, :, :, :])
 
     print('number of triplets = ', len(triplet_list))
-    #return triplet_list
+    return triplet_list
+    #return np.asarray(triplet_list)
 
-def get_batch(triplet_list,batch_size):
-    batch = {}
-    
+def  get_batch(s_train,s_db,triplet_list,batch_size):
 
+    batch = []
 
+    idx = random.sample(range(0, len(triplet_list)),batch_size)
+    #print (idx)
+    for i in idx:
+        t = triplet_list[i]
+        batch.append( s_train['img'][t[0],:,:,:])
+        batch.append(s_db['img'][t[1],:,:,:])
+        batch.append(s_db['img'][t[2],:,:,:])
 
-
+    #yield(np.asarray(batch))
+    return np.asarray(batch)
 
 if '__main__' == __name__:
 
@@ -100,4 +102,10 @@ if '__main__' == __name__:
     s_train = util.build_train_set(real_set,fine_set,train_idx)
     s_test = util.build_test_set(real_set,test_idx)
 
-    gen_triplet_list(s_train,s_db)
+    triplet_list = gen_triplet_list(s_train,s_db)
+
+
+    batch_size = 64
+    batch_array = get_batch(s_train, s_db, triplet_list, batch_size)
+    print('batch shape', batch_array.shape )
+
