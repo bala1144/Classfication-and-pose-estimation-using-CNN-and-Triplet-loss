@@ -27,7 +27,7 @@ def visualizer(anchor,puller,s_pusher):
 
 def get_puller(anchor,anc_class,s_db):
     #print('building puller')
-    #pusher_thershold = 10
+    thresh = 2
     thetha_list = []
     puller = -1
 
@@ -47,8 +47,12 @@ def get_puller(anchor,anc_class,s_db):
 
     puller = np.argmin(thetha_list)
 
-    #same class pusher
-    s_pusher = np.argmax(thetha_list)
+    #same class pusher  - code enforces
+    #s_pusher = np.argmax(thetha_list)
+    a = thetha_list
+    s_pusher_value = np.partition(a, thresh)[thresh]
+    print('pusher val ', s_pusher_value)
+    s_pusher = list(thetha_list).index(s_pusher_value)
     #need to change it
 
     # return puller + indx[0], puller + indx[0] + pusher_thershold
@@ -59,7 +63,8 @@ def gen_triplet_list(s_train,s_db):
     print('building triplet list')
     triplet_list = []
 
-    #for i in range(100):
+
+    #for i in range(10):
     for i in range(s_train['pose'].shape[0]):
         #print(i)
         test_anchor = s_train['pose'][i, :]
@@ -69,7 +74,7 @@ def gen_triplet_list(s_train,s_db):
         puller, s_pusher = get_puller(test_anchor, test_anchor_class, s_db)
         # print('puller class', s_db['label'][puller])
         triplet_list.append([i,puller,s_pusher])
-    # visualizer(s_train['img'][i, :, :, :], s_db['img'][puller, :, :, :], s_db['img'][s_pusher, :, :, :])
+    visualizer(s_train['img'][i, :, :, :], s_db['img'][puller, :, :, :], s_db['img'][s_pusher, :, :, :])
 
     print('number of triplets = ', len(triplet_list))
     return triplet_list
@@ -83,7 +88,7 @@ def  get_batch(s_train,s_db,triplet_list,batch_size):
     #print (idx)
     for i in idx:
         t = triplet_list[i]
-        batch.append( s_train['img'][t[0],:,:,:])
+        batch.append(s_train['img'][t[0],:,:,:])
         batch.append(s_db['img'][t[1],:,:,:])
         batch.append(s_db['img'][t[2],:,:,:])
 
