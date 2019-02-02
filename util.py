@@ -61,6 +61,7 @@ def loadDataset(dataSetPath,poseFilePath):
     # continue
 
     #if(p):
+    class_idx = 0
     for p in sorted(classes):
         #print(p)
         curr_dir = os.path.join(dataSetPath,p)
@@ -81,7 +82,8 @@ def loadDataset(dataSetPath,poseFilePath):
                 qt_pose[3] = qt_pose[3].strip('\n')
                 quateronins_list.append(qt_pose)
 
-                class_list.append(p)
+                #class_list.append(p)
+                class_list.append(class_idx)
                 # print (qt_pose[3].strip('\n'))
             line = pose_file.readline()
 
@@ -89,6 +91,7 @@ def loadDataset(dataSetPath,poseFilePath):
         dataset['img'] = np.asarray(img_list)
         dataset['pose'] = np.asarray(quateronins_list)
         dataset['label'] = np.asarray(class_list)
+        class_idx = class_idx + 1
 
     assertDimsCheck(dataset)
     return dataset
