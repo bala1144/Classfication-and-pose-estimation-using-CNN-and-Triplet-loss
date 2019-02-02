@@ -51,7 +51,7 @@ def get_puller(anchor,anc_class,s_db):
     #s_pusher = np.argmax(thetha_list)
     a = thetha_list
     s_pusher_value = np.partition(a, thresh)[thresh]
-    print('pusher val ', s_pusher_value)
+    #print('pusher val ', s_pusher_value)
     s_pusher = list(thetha_list).index(s_pusher_value)
     #need to change it
 
@@ -74,7 +74,7 @@ def gen_triplet_list(s_train,s_db):
         puller, s_pusher = get_puller(test_anchor, test_anchor_class, s_db)
         # print('puller class', s_db['label'][puller])
         triplet_list.append([i,puller,s_pusher])
-    visualizer(s_train['img'][i, :, :, :], s_db['img'][puller, :, :, :], s_db['img'][s_pusher, :, :, :])
+    #visualizer(s_train['img'][i, :, :, :], s_db['img'][puller, :, :, :], s_db['img'][s_pusher, :, :, :])
 
     print('number of triplets = ', len(triplet_list))
     return triplet_list
