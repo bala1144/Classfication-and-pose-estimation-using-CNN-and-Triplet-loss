@@ -285,7 +285,7 @@ def flatten_layer(layer, name=None):
 
     return layer_flat, num_features
 
-
+#Fully connected layer
 def new_fc_layer(input, num_inputs, num_outputs, relu=True, name=None): 
 
     weights = new_weights(shape=[num_inputs, num_outputs], name=name)
@@ -298,11 +298,11 @@ def new_fc_layer(input, num_inputs, num_outputs, relu=True, name=None):
 
     return layer
 
-
+#Calculation of total loss (Pair + triplets)
 def total_loss(features, m = 0.01):
     return triplets_loss(features, m) + pairs_loss(features)
     
-    
+# Calculation of triplets loss    
 def triplets_loss(feature_desc, m = 0.01):
     batch_size = feature_desc.shape[0]
     
@@ -314,7 +314,7 @@ def triplets_loss(feature_desc, m = 0.01):
     
     return loss
 
-
+#Calculation of pair loss
 def pairs_loss(feature_desc):
     batch_size = feature_desc.shape[0]
 
@@ -323,6 +323,7 @@ def pairs_loss(feature_desc):
     
     return loss
 
+# Output the descriptor from the database and test
 
 def output_features(S_db, S_test, output_layer, loss, x, index_model):
     init = tf.global_variables_initializer()
@@ -344,7 +345,9 @@ def output_features(S_db, S_test, output_layer, loss, x, index_model):
     
     return descriptors_db, descriptors_test
         
-        
+# Calculating the angles count, indices and confusion matrix at each 1000's iteration.
+# Match the feature from the DB and the test features.
+    
 def matching_feature_map(feat_db, feat_test, db_classes, test_classes, db_quat, test_quat):
     indeces = []
     angles = [10.0, 20.0, 40.0, 180.0]
@@ -377,10 +380,12 @@ def matching_feature_map(feat_db, feat_test, db_classes, test_classes, db_quat, 
     
     return angles_count, indeces, confusion_matrix
 
+# Calculate the euclidean distance
 
 def Euclidean_distance(f1, f2):
     return np.sqrt(np.sum(np.square(f1 - f2)))
 
+# Save the histogram at each 1000's iteration
 
 def save_histogram(hist, index):
     assert(len(hist) == 4)
@@ -403,7 +408,9 @@ def save_histogram(hist, index):
     plt.cla()
     plt.close()
     
-    
+
+# This function draws curve for angle < 10,20,40 and 180 for the final angles    
+
 def save_plot_angles(histogram):
     
     histogram = np.array(histogram)
