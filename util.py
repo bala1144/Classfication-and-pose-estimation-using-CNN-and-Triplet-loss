@@ -59,7 +59,6 @@ def loadDataset(dataSetPath,poseFilePath):
     classes = getSubDir(dataSetPath)
     print (classes)
     # print(classes[0])
-    p = classes[3]
 
     # for filename in os.listdir(curr_dir):
     # if filename.endswith(".png"):
