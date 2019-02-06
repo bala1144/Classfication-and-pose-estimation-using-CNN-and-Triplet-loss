@@ -323,7 +323,7 @@ def pairs_loss(feature_desc):
     
     return loss
 
-# Output the descriptor from the database and test
+# Output the descriptor from the database and test from each model saved at 1000's iteration
 
 def output_features(S_db, S_test, output_layer, loss, x, index_model):
     init = tf.global_variables_initializer()
@@ -346,7 +346,8 @@ def output_features(S_db, S_test, output_layer, loss, x, index_model):
     return descriptors_db, descriptors_test
         
 # Calculating the angles count, indices and confusion matrix at each 1000's iteration.
-# Match the feature from the DB and the test features.
+# Calculating the nearest neighbour for the descriptor in db, if found, then calculating the angle difference and storing it
+# Based on the storing value of angle, we are calculating the histograms
     
 def matching_feature_map(feat_db, feat_test, db_classes, test_classes, db_quat, test_quat):
     indeces = []
